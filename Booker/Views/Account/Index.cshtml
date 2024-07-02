@@ -1,0 +1,56 @@
+﻿@model IEnumerable<Booker.Models.Book>
+
+@{
+ViewData["Title"] = "Books List";
+}
+
+<div class="container">
+    <h2>Books List</h2>
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Add New Book</a>
+    </p>
+    @foreach (var book in Model)
+    {
+    <div class="row mb-4">
+        <div class="col-md-2">
+            @if (book.ImageData != null && book.ImageData.Length > 0)
+            {
+            string base64Image = Convert.ToBase64String(book.ImageData);
+            string imageSrc = $"data:image/png;base64,{base64Image}";
+            <img src="@imageSrc" alt="Cover Image" class="img-fluid"/>
+            }
+            else
+            {
+            <span>No Image</span>
+            }
+        </div>
+        <div class="col-md-6">
+            <h5>@book.Title</h5>
+            <p>
+                <strong>Author:</strong> @book.Author
+            </p>
+            <p>
+                <strong>Genre:</strong> @book.Genre
+            </p>
+            <p>
+                <strong>Publication Date:</strong> @book.PublicationDate.ToShortDateString()
+            </p>
+        </div>
+        <div class="col-md-2">
+            <form asp-controller="Cart" asp-action="Buy" method="post">
+                <div class="input-group mb-3">
+                    <input type="hidden" name="id" value="@book.Id" />
+                    <input type="number" name="quantity" class="form-control" value="1" min="1" max="10" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-success">Add to Cart</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-2">
+            <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-primary mb-2">Edit</a>
+            <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+    }
+</div>
