@@ -1,13 +1,9 @@
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Booker.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Booker.Controllers
 {
@@ -20,13 +16,11 @@ namespace Booker.Controllers
             _context = context;
         }
 
-        // GET: /Account/Login
         public IActionResult Login()
         {
             return View();
         }
 
-        // POST: /Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(AccountModel model)
@@ -36,7 +30,7 @@ namespace Booker.Controllers
 
             if (user != null)
             {
-                await Authenticate(user); // authenticate user
+                await Authenticate(user);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -55,7 +49,6 @@ namespace Booker.Controllers
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()), // Assuming user.UserId is the unique identifier
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
-                // Add other claims as needed
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie", 
@@ -66,13 +59,11 @@ namespace Booker.Controllers
         }
 
 
-        // GET: /Account/Register
         public IActionResult Register()
         {
             return View();
         }
 
-        // POST: /Account/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(AccountModel model)
@@ -93,13 +84,13 @@ namespace Booker.Controllers
                     Password = model.Password,
                     Name = model.Name,
                     Surname = model.Surname,
-                    Role = "User" // Assign a default role
+                    Role = "User"
                 };
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
 
-                await Authenticate(user); // authenticate user after registration
+                await Authenticate(user);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -107,7 +98,6 @@ namespace Booker.Controllers
             return View(model);
         }
 
-        // GET: /Account/Logout
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

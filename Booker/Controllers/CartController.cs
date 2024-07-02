@@ -31,7 +31,6 @@ namespace Booker.Controllers
             return View(cartItems);
         }
 
-        // POST: /Cart/Buy
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -57,13 +56,11 @@ namespace Booker.Controllers
 
             if (cartItem != null)
             {
-                // If the book is already in the cart, update the quantity
                 cartItem.Amount += quantity;
                 _context.Update(cartItem);
             }
             else
             {
-                // If the book is not yet in the cart, add it with the specified quantity
                 cartItem = new Cart
                 {
                     UserId = user.UserId,
@@ -78,7 +75,6 @@ namespace Booker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Cart/Checkout
         [Authorize]
         public async Task<IActionResult> Checkout()
         {
@@ -91,7 +87,6 @@ namespace Booker.Controllers
             return View(cartItems);
         }
 
-        // POST: /Cart/UpdateQuantity
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -112,7 +107,6 @@ namespace Booker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /Cart/RemoveFromCart/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -130,7 +124,6 @@ namespace Booker.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /Cart/Checkout
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -141,13 +134,10 @@ namespace Booker.Controllers
                 .Where(c => c.UserId == int.Parse(userId))
                 .ToListAsync();
 
-            // Perform checkout logic (e.g., create order, process payment, etc.)
-
-            // Clear the cart after checkout
             _context.Carts.RemoveRange(cartItems);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Home"); // Redirect to home page or order confirmation page
+            return RedirectToAction("Index", "Home");
         }
     }
     

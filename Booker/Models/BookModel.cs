@@ -13,7 +13,7 @@ public class BookModel
     [Required(ErrorMessage = "Please enter the author name")]
     public string Author { get; set; }
 
-    [Required(ErrorMessage = "Please enter the Genere")]
+    [Required(ErrorMessage = "Please enter the Genre")]
     public string Genre { get; set; }
 
     public DateTime PublicationDate { get; set; }

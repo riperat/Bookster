@@ -33,7 +33,6 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    // Add Book GET
     [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
@@ -88,13 +87,11 @@ public class HomeController : Controller
             Author = book.Author,
             Genre = book.Genre,
             PublicationDate = book.PublicationDate
-            // You might also need to populate CoverPhoto and CoverImageUrl if editing these fields
         };
 
         return View(bookModel);
     }
 
-// Edit Book POST
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = "Admin")]
@@ -113,13 +110,11 @@ public class HomeController : Controller
                 return NotFound();
             }
 
-            // Update the book entity with the edited values
             book.Title = bookModel.Title;
             book.Author = bookModel.Author;
             book.Genre = bookModel.Genre;
             book.PublicationDate = bookModel.PublicationDate;
 
-            // Handle image update if provided
             if (bookModel.CoverPhoto != null && bookModel.CoverPhoto.Length > 0)
             {
                 using (var memoryStream = new MemoryStream())
@@ -138,7 +133,6 @@ public class HomeController : Controller
     }
 
 
-// Delete Book GET
     [Authorize(Roles = "Admin")]
     public IActionResult Delete(int id)
     {
